@@ -11,7 +11,10 @@ Location: `scripts/gcode_nonplanar_modulation.py`
 
 Adds wave-based non-planar modulation to G-code for enhanced visual effects and improved layer adhesion. Supports multiple wave functions (sine, triangle, trapezoidal, sawtooth) and can be applied to walls, infill, or both.
 
-**Example usage:**
+**GUI Configuration:**
+As of the latest version, non-planar modulation can be configured directly through the GUI in the "Others" tab under "Non-planar Modulation". Simply enable the feature and configure your desired settings through the user interface. The GUI will automatically generate and execute the appropriate script commands.
+
+**Manual Script Usage:**
 ```
 python3 scripts/gcode_nonplanar_modulation.py [output_file_placeholder] -include-perimeters -wall-amplitude 0.2 -wall-function sine
 ```
@@ -20,4 +23,4 @@ See `scripts/README_gcode_nonplanar_modulation.md` for complete documentation.
 
 ## Custom Scripts
 
-You can also add your own custom post-processing scripts by specifying the full path to the script executable.
+You can also add your own custom post-processing scripts by specifying the full path to the script executable. These will be executed after any built-in scripts like non-planar modulation.

@@ -16,6 +16,11 @@
 #include <iostream>
 #include <fstream>
 
+#ifndef WIN32
+#include <unistd.h>   // For readlink
+#include <limits.h>   // For PATH_MAX
+#endif
+
 #ifdef WIN32
 
 // The standard Windows includes.
@@ -233,13 +238,57 @@ std::string build_nonplanar_modulation_script_command(const DynamicPrintConfig &
         return "";
     }
 
-    std::string script_path = "python3 scripts/gcode_nonplanar_modulation.py";
+    // Try to find the script in the scripts directory relative to the executable
+    std::string script_path;
+    
+    // First try relative to current directory (for development)
+    if (boost::filesystem::exists("scripts/gcode_nonplanar_modulation.py")) {
+        script_path = "python3 scripts/gcode_nonplanar_modulation.py";
+    }
+    // Try relative to executable directory
+    else {
+#ifdef WIN32
+        wchar_t wpath_exe[_MAX_PATH + 1];
+        ::GetModuleFileNameW(nullptr, wpath_exe, _MAX_PATH);
+        boost::filesystem::path exe_path(wpath_exe);
+        boost::filesystem::path script_file = exe_path.parent_path() / "scripts" / "gcode_nonplanar_modulation.py";
+        if (boost::filesystem::exists(script_file)) {
+            script_path = "python3 \"" + script_file.string() + "\"";
+        }
+#else
+        char path[PATH_MAX];
+        ssize_t count = readlink("/proc/self/exe", path, PATH_MAX);
+        if (count != -1) {
+            path[count] = '\0';
+            boost::filesystem::path exe_path(path);
+            boost::filesystem::path script_file = exe_path.parent_path() / "scripts" / "gcode_nonplanar_modulation.py";
+            if (boost::filesystem::exists(script_file)) {
+                script_path = "python3 \"" + script_file.string() + "\"";
+            }
+        }
+#endif
+    }
+    
+    // If we couldn't find the script, fall back to a default path
+    if (script_path.empty()) {
+        script_path = "python3 scripts/gcode_nonplanar_modulation.py";
+    }
+
     std::vector<std::string> args;
 
     // Include options
     const ConfigOptionBool* include_infill = config.opt<ConfigOptionBool>("nonplanar_modulation_include_infill");
     const ConfigOptionBool* include_perimeters = config.opt<ConfigOptionBool>("nonplanar_modulation_include_perimeters");
     const ConfigOptionBool* include_external_perimeters = config.opt<ConfigOptionBool>("nonplanar_modulation_include_external_perimeters");
+
+    // If no include options are set, return empty string
+    bool has_includes = (include_infill && include_infill->getBool()) ||
+                       (include_perimeters && include_perimeters->getBool()) ||
+                       (include_external_perimeters && include_external_perimeters->getBool());
+    
+    if (!has_includes) {
+        return "";
+    }
 
     if (include_infill && include_infill->getBool()) {
         args.push_back("-include-infill");
@@ -341,11 +390,6 @@ std::string build_nonplanar_modulation_script_command(const DynamicPrintConfig &
     if (resolution) {
         args.push_back("-resolution");
         args.push_back(std::to_string(resolution->value));
-    }
-
-    // If no include options are set, return empty string
-    if (args.empty() || (args.size() == 1 && args[0] != "-include-infill" && args[0] != "-include-perimeters" && args[0] != "-include-external-perimeters")) {
-        return "";
     }
 
     // Build the final command
