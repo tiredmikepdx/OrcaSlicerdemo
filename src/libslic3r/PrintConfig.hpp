@@ -277,6 +277,24 @@ enum BedType {
     btCount
 };
 
+// Non-planar modulation wave functions
+enum NonPlanarWaveFunction {
+    npwfSine = 0,
+    npwfTriangle,
+    npwfTrapezoidal,
+    npwfSawtooth
+};
+
+// Non-planar modulation directions
+enum NonPlanarDirection {
+    npdX = 0,
+    npdY,
+    npdXY,
+    npdNegX,
+    npdNegY,
+    npdNegXY
+};
+
 // BBS
 enum LayerSeq {
     flsAuto, 
@@ -460,6 +478,8 @@ CONFIG_OPTION_ENUM_DECLARE_STATIC_MAPS(PrintHostType)
 CONFIG_OPTION_ENUM_DECLARE_STATIC_MAPS(AuthorizationType)
 CONFIG_OPTION_ENUM_DECLARE_STATIC_MAPS(WipeTowerWallType)
 CONFIG_OPTION_ENUM_DECLARE_STATIC_MAPS(PerimeterGeneratorType)
+CONFIG_OPTION_ENUM_DECLARE_STATIC_MAPS(NonPlanarWaveFunction)
+CONFIG_OPTION_ENUM_DECLARE_STATIC_MAPS(NonPlanarDirection)
 
 #undef CONFIG_OPTION_ENUM_DECLARE_STATIC_MAPS
 
@@ -1322,6 +1342,21 @@ PRINT_CONFIG_CLASS_DERIVED_DEFINE(
     ((ConfigOptionBool,               ooze_prevention))
     ((ConfigOptionString,             filename_format))
     ((ConfigOptionStrings,            post_process))
+    ((ConfigOptionBool,               nonplanar_modulation_enable))
+    ((ConfigOptionBool,               nonplanar_modulation_include_infill))
+    ((ConfigOptionBool,               nonplanar_modulation_include_perimeters))
+    ((ConfigOptionBool,               nonplanar_modulation_include_external_perimeters))
+    ((ConfigOptionFloat,              nonplanar_modulation_wall_amplitude))
+    ((ConfigOptionFloat,              nonplanar_modulation_wall_frequency))
+    ((ConfigOptionEnum<NonPlanarWaveFunction>, nonplanar_modulation_wall_function))
+    ((ConfigOptionEnum<NonPlanarDirection>, nonplanar_modulation_wall_direction))
+    ((ConfigOptionFloat,              nonplanar_modulation_infill_amplitude))
+    ((ConfigOptionFloat,              nonplanar_modulation_infill_frequency))
+    ((ConfigOptionEnum<NonPlanarWaveFunction>, nonplanar_modulation_infill_function))
+    ((ConfigOptionEnum<NonPlanarDirection>, nonplanar_modulation_infill_direction))
+    ((ConfigOptionFloat,              nonplanar_modulation_max_step_size))
+    ((ConfigOptionBool,               nonplanar_modulation_alternate_loops))
+    ((ConfigOptionFloat,              nonplanar_modulation_resolution))
     ((ConfigOptionString,             printer_model))
     ((ConfigOptionFloat,              resolution))
     ((ConfigOptionFloats,             retraction_minimum_travel))
