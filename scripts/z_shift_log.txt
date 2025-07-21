@@ -1,0 +1,152 @@
+2025-07-21 01:45:04,739 - Starting G-code processing
+2025-07-21 01:45:04,739 - Input file: complex_test.gcode
+2025-07-21 01:45:04,739 - Detected layer height from G-code: 0.25mm
+2025-07-21 01:45:04,739 - Processing non-planar infill modifications...
+2025-07-21 01:45:04,739 - Found solid infill at Z=0.5
+2025-07-21 01:45:04,740 - Non-planar infill processing completed
+2025-07-21 01:45:04,740 - Processing wall shifting modifications...
+2025-07-21 01:45:04,740 - Layer 1 detected at Z=0.250
+2025-07-21 01:45:04,740 - External perimeter detected at layer 1
+2025-07-21 01:45:04,740 - Cached G1 movement: G1 X10 Y10 E0.1 F1800
+2025-07-21 01:45:04,740 - Cached F speed: 1800.0
+2025-07-21 01:45:04,740 - Cached G1 movement: G1 X30 Y10 E0.3 F1800
+2025-07-21 01:45:04,740 - Cached F speed: 1800.0
+2025-07-21 01:45:04,740 - Cached G1 movement: G1 X30 Y30 E0.5 F1800
+2025-07-21 01:45:04,740 - Cached F speed: 1800.0
+2025-07-21 01:45:04,740 - Cached G1 movement: G1 X10 Y30 E0.7 F1800
+2025-07-21 01:45:04,740 - Cached F speed: 1800.0
+2025-07-21 01:45:04,740 - Cached G1 movement: G1 X10 Y10 E0.9 F1800
+2025-07-21 01:45:04,740 - Cached F speed: 1800.0
+2025-07-21 01:45:04,740 - Internal perimeter block started at layer 1
+2025-07-21 01:45:04,740 - Cached G1 movement: G1 X12 Y12 E1.50000 F1800 ; First inner wall block ; Adjusted E for first layer (1.5x), block #1
+2025-07-21 01:45:04,740 - Cached F speed: 1800.0
+2025-07-21 01:45:04,740 - Cached G1 movement: G1 X28 Y12 E1.80000 F1800 ; Adjusted E for first layer (1.5x), block #1
+2025-07-21 01:45:04,740 - Cached F speed: 1800.0
+2025-07-21 01:45:04,740 - Cached G1 movement: G1 X28 Y28 E2.10000 F1800 ; Adjusted E for first layer (1.5x), block #1
+2025-07-21 01:45:04,740 - Cached F speed: 1800.0
+2025-07-21 01:45:04,740 - Cached G1 movement: G1 X12 Y28 E2.40000 F1800 ; Adjusted E for first layer (1.5x), block #1
+2025-07-21 01:45:04,740 - Cached F speed: 1800.0
+2025-07-21 01:45:04,740 - Cached G1 movement: G1 X12 Y12 E2.70000 F1800 ; Adjusted E for first layer (1.5x), block #1
+2025-07-21 01:45:04,740 - Cached F speed: 1800.0
+2025-07-21 01:45:04,740 - Cached G1 movement: G1 X14 Y14 F1800 ; Travel move to next block
+2025-07-21 01:45:04,740 - Cached F speed: 1800.0
+2025-07-21 01:45:04,740 - Cached G1 movement: G1 X14 Y14 E1.9 F1800 ; Second inner wall block
+2025-07-21 01:45:04,740 - Cached F speed: 1800.0
+2025-07-21 01:45:04,740 - Cached G1 movement: G1 X26 Y14 E2.1 F1800
+2025-07-21 01:45:04,740 - Cached F speed: 1800.0
+2025-07-21 01:45:04,740 - Cached G1 movement: G1 X26 Y26 E2.3 F1800
+2025-07-21 01:45:04,740 - Cached F speed: 1800.0
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X14 Y26 E2.5 F1800
+2025-07-21 01:45:04,741 - Cached F speed: 1800.0
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X14 Y14 E2.7 F1800
+2025-07-21 01:45:04,741 - Cached F speed: 1800.0
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X11.000 Y15.000 Z0.143 E0.14821 ; Correction factor: 1.006 Original E: 0.14737
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X12.000 Y15.000 Z0.137 E0.14830 ; Correction factor: 1.006 Original E: 0.14737
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X13.000 Y15.000 Z0.341 E0.14798 ; Correction factor: 1.004 Original E: 0.14737
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X14.000 Y15.000 Z0.375 E0.14852 ; Correction factor: 1.008 Original E: 0.14737
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X15.000 Y15.000 Z0.177 E0.14776 ; Correction factor: 1.003 Original E: 0.14737
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X16.000 Y15.000 Z0.114 E0.14872 ; Correction factor: 1.009 Original E: 0.14737
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X17.000 Y15.000 Z0.304 E0.14758 ; Correction factor: 1.001 Original E: 0.14737
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X18.000 Y15.000 Z0.393 E0.14888 ; Correction factor: 1.010 Original E: 0.14737
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X19.000 Y15.000 Z0.216 E0.14745 ; Correction factor: 1.001 Original E: 0.14737
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X20.000 Y15.000 Z0.102 E0.14898 ; Correction factor: 1.011 Original E: 0.14737
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X21.000 Y15.000 Z0.263 E0.14738 ; Correction factor: 1.000 Original E: 0.14737
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X22.000 Y15.000 Z0.400 E0.14902 ; Correction factor: 1.011 Original E: 0.14737
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X23.000 Y15.000 Z0.259 E0.14737 ; Correction factor: 1.000 Original E: 0.14737
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X24.000 Y15.000 Z0.101 E0.14899 ; Correction factor: 1.011 Original E: 0.14737
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X25.000 Y15.000 Z0.220 E0.14743 ; Correction factor: 1.000 Original E: 0.14737
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X26.000 Y15.000 Z0.395 E0.14890 ; Correction factor: 1.010 Original E: 0.14737
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X27.000 Y15.000 Z0.300 E0.14755 ; Correction factor: 1.001 Original E: 0.14737
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X28.000 Y15.000 Z0.113 E0.14875 ; Correction factor: 1.009 Original E: 0.14737
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X29.000 Y15.000 Z0.180 E0.14772 ; Correction factor: 1.002 Original E: 0.14737
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X29.000 Y15.000 Z0.180 E0.21385 ; Correction factor: 1.002 Original E: 0.21333
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X28.000 Y14.714 Z0.113 E0.21534 ; Correction factor: 1.009 Original E: 0.21333
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X27.000 Y14.429 Z0.300 E0.21360 ; Correction factor: 1.001 Original E: 0.21333
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X26.000 Y14.143 Z0.395 E0.21555 ; Correction factor: 1.010 Original E: 0.21333
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X25.000 Y13.857 Z0.220 E0.21343 ; Correction factor: 1.000 Original E: 0.21333
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X24.000 Y13.571 Z0.101 E0.21568 ; Correction factor: 1.011 Original E: 0.21333
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X23.000 Y13.286 Z0.259 E0.21334 ; Correction factor: 1.000 Original E: 0.21333
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X22.000 Y13.000 Z0.400 E0.21572 ; Correction factor: 1.011 Original E: 0.21333
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X21.000 Y12.714 Z0.263 E0.21335 ; Correction factor: 1.000 Original E: 0.21333
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X20.000 Y12.429 Z0.102 E0.21566 ; Correction factor: 1.011 Original E: 0.21333
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X19.000 Y12.143 Z0.216 E0.21345 ; Correction factor: 1.001 Original E: 0.21333
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X18.000 Y11.857 Z0.393 E0.21552 ; Correction factor: 1.010 Original E: 0.21333
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X17.000 Y11.571 Z0.304 E0.21364 ; Correction factor: 1.001 Original E: 0.21333
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X16.000 Y11.286 Z0.114 E0.21529 ; Correction factor: 1.009 Original E: 0.21333
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X15.000 Y11.000 Z0.177 E0.21390 ; Correction factor: 1.003 Original E: 0.21333
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X15.000 Y11.000 Z0.177 E0.17942 ; Correction factor: 1.003 Original E: 0.17895
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X15.000 Y12.000 Z0.177 E0.17942 ; Correction factor: 1.003 Original E: 0.17895
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X15.000 Y13.000 Z0.177 E0.17942 ; Correction factor: 1.003 Original E: 0.17895
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X15.000 Y14.000 Z0.177 E0.17942 ; Correction factor: 1.003 Original E: 0.17895
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X15.000 Y15.000 Z0.177 E0.17942 ; Correction factor: 1.003 Original E: 0.17895
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X15.000 Y16.000 Z0.177 E0.17942 ; Correction factor: 1.003 Original E: 0.17895
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X15.000 Y17.000 Z0.177 E0.17942 ; Correction factor: 1.003 Original E: 0.17895
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X15.000 Y18.000 Z0.177 E0.17942 ; Correction factor: 1.003 Original E: 0.17895
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X15.000 Y19.000 Z0.177 E0.17942 ; Correction factor: 1.003 Original E: 0.17895
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X15.000 Y20.000 Z0.177 E0.17942 ; Correction factor: 1.003 Original E: 0.17895
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X15.000 Y21.000 Z0.177 E0.17942 ; Correction factor: 1.003 Original E: 0.17895
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X15.000 Y22.000 Z0.177 E0.17942 ; Correction factor: 1.003 Original E: 0.17895
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X15.000 Y23.000 Z0.177 E0.17942 ; Correction factor: 1.003 Original E: 0.17895
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X15.000 Y24.000 Z0.177 E0.17942 ; Correction factor: 1.003 Original E: 0.17895
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X15.000 Y25.000 Z0.177 E0.17942 ; Correction factor: 1.003 Original E: 0.17895
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X15.000 Y26.000 Z0.177 E0.17942 ; Correction factor: 1.003 Original E: 0.17895
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X15.000 Y27.000 Z0.177 E0.17942 ; Correction factor: 1.003 Original E: 0.17895
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X15.000 Y28.000 Z0.177 E0.17942 ; Correction factor: 1.003 Original E: 0.17895
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X15.000 Y29.000 Z0.177 E0.17942 ; Correction factor: 1.003 Original E: 0.17895
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X15.000 Y29.000 Z0.177 E0.27215 ; Correction factor: 1.003 Original E: 0.27143
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X15.769 Y28.308 Z0.101 E0.27444 ; Correction factor: 1.011 Original E: 0.27143
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X16.538 Y27.615 Z0.202 E0.27174 ; Correction factor: 1.001 Original E: 0.27143
+2025-07-21 01:45:04,741 - Cached G1 movement: G1 X17.308 Y26.923 Z0.361 E0.27308 ; Correction factor: 1.006 Original E: 0.27143
+2025-07-21 01:45:04,742 - Cached G1 movement: G1 X18.077 Y26.231 Z0.387 E0.27398 ; Correction factor: 1.009 Original E: 0.27143
+2025-07-21 01:45:04,742 - Cached G1 movement: G1 X18.846 Y25.538 Z0.251 E0.27143 ; Correction factor: 1.000 Original E: 0.27143
+2025-07-21 01:45:04,742 - Cached G1 movement: G1 X19.615 Y24.846 Z0.113 E0.27396 ; Correction factor: 1.009 Original E: 0.27143
+2025-07-21 01:45:04,742 - Cached G1 movement: G1 X20.385 Y24.154 Z0.138 E0.27311 ; Correction factor: 1.006 Original E: 0.27143
+2025-07-21 01:45:04,742 - Cached G1 movement: G1 X21.154 Y23.462 Z0.296 E0.27172 ; Correction factor: 1.001 Original E: 0.27143
+2025-07-21 01:45:04,742 - Cached G1 movement: G1 X21.923 Y22.769 Z0.399 E0.27443 ; Correction factor: 1.011 Original E: 0.27143
+2025-07-21 01:45:04,742 - Cached G1 movement: G1 X22.692 Y22.077 Z0.324 E0.27218 ; Correction factor: 1.003 Original E: 0.27143
+2025-07-21 01:45:04,742 - Cached G1 movement: G1 X23.462 Y21.385 Z0.161 E0.27250 ; Correction factor: 1.004 Original E: 0.27143
+2025-07-21 01:45:04,742 - Cached G1 movement: G1 X24.231 Y20.692 Z0.104 E0.27432 ; Correction factor: 1.011 Original E: 0.27143
+2025-07-21 01:45:04,742 - Cached G1 movement: G1 X25.000 Y20.000 Z0.220 E0.27155 ; Correction factor: 1.000 Original E: 0.27143
+2025-07-21 01:45:04,742 - Cached G1 movement: G1 X25.000 Y20.000 Z0.220 E0.66696 ; Correction factor: 1.000 Original E: 0.66667
+2025-07-21 01:45:04,742 - Cached G1 movement: G1 X25.000 Y21.000 Z0.220 E0.66696 ; Correction factor: 1.000 Original E: 0.66667
+2025-07-21 01:45:04,742 - Cached G1 movement: G1 X25.000 Y22.000 Z0.220 E0.66696 ; Correction factor: 1.000 Original E: 0.66667
+2025-07-21 01:45:04,742 - Cached G1 movement: G1 X25.000 Y23.000 Z0.220 E0.66696 ; Correction factor: 1.000 Original E: 0.66667
+2025-07-21 01:45:04,742 - Cached G1 movement: G1 X25.000 Y24.000 Z0.220 E0.66696 ; Correction factor: 1.000 Original E: 0.66667
+2025-07-21 01:45:04,742 - Cached G1 movement: G1 X25.000 Y25.000 Z0.220 E0.66696 ; Correction factor: 1.000 Original E: 0.66667
+2025-07-21 01:45:04,742 - Cached G1 movement: G1 X25 Y25 E4.2 F1800
+2025-07-21 01:45:04,742 - Cached F speed: 1800.0
+2025-07-21 01:45:04,742 - Layer 2 detected at Z=0.500
+2025-07-21 01:45:04,742 - External perimeter detected at layer 2
+2025-07-21 01:45:04,742 - Cached G1 movement: G1 X10 Y10 E4.3 F1800
+2025-07-21 01:45:04,742 - Cached F speed: 1800.0
+2025-07-21 01:45:04,742 - Cached G1 movement: G1 X30 Y10 E4.5 F1800
+2025-07-21 01:45:04,742 - Cached F speed: 1800.0
+2025-07-21 01:45:04,742 - Cached G1 movement: G1 X30 Y30 E4.7 F1800
+2025-07-21 01:45:04,742 - Cached F speed: 1800.0
+2025-07-21 01:45:04,742 - Cached G1 movement: G1 X10 Y30 E4.9 F1800
+2025-07-21 01:45:04,742 - Cached F speed: 1800.0
+2025-07-21 01:45:04,742 - Cached G1 movement: G1 X10 Y10 E5.1 F1800
+2025-07-21 01:45:04,742 - Cached F speed: 1800.0
+2025-07-21 01:45:04,742 - Cached G1 movement: G1 X11 Y11 E5.2 F1800
+2025-07-21 01:45:04,742 - Cached F speed: 1800.0
+2025-07-21 01:45:04,742 - Cached G1 movement: G1 X29 Y11 E5.6 F1800
+2025-07-21 01:45:04,742 - Cached F speed: 1800.0
+2025-07-21 01:45:04,742 - Cached G1 movement: G1 X29 Y29 E6.0 F1800
+2025-07-21 01:45:04,742 - Cached F speed: 1800.0
+2025-07-21 01:45:04,742 - Cached G1 movement: G1 X11 Y29 E6.4 F1800
+2025-07-21 01:45:04,742 - Cached F speed: 1800.0
+2025-07-21 01:45:04,742 - Layer 3 detected at Z=0.750
+2025-07-21 01:45:04,742 - External perimeter detected at layer 3
+2025-07-21 01:45:04,742 - Cached G1 movement: G1 X10 Y10 E6.5 F1800
+2025-07-21 01:45:04,742 - Cached F speed: 1800.0
+2025-07-21 01:45:04,742 - Cached G1 movement: G1 X30 Y10 E6.7 F1800
+2025-07-21 01:45:04,742 - Cached F speed: 1800.0
+2025-07-21 01:45:04,742 - Cached G1 movement: G1 X30 Y30 E6.9 F1800
+2025-07-21 01:45:04,742 - Cached F speed: 1800.0
+2025-07-21 01:45:04,742 - Cached G1 movement: G1 X10 Y30 E7.1 F1800
+2025-07-21 01:45:04,742 - Cached F speed: 1800.0
+2025-07-21 01:45:04,742 - Cached G1 movement: G1 X10 Y10 E7.3 F1800
+2025-07-21 01:45:04,742 - Cached F speed: 1800.0
+2025-07-21 01:45:04,742 - Wall shifting processing completed
+2025-07-21 01:45:04,742 - G-code processing completed
+2025-07-21 01:45:04,743 - Log file saved at /home/runner/work/OrcaSlicerdemo/OrcaSlicerdemo/scripts/z_shift_log.txt
