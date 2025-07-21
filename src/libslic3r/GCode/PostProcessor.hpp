@@ -29,6 +29,9 @@ inline bool run_post_process_scripts(std::string &src_path, const DynamicPrintCo
 // BBS
 extern void gcode_add_line_number(const std::string &path, const DynamicPrintConfig &config);
 
+// Build non-planar modulation script command from configuration
+extern std::string build_nonplanar_modulation_script_command(const DynamicPrintConfig &config);
+
 } // namespace Slic3r
 
 #endif /* slic3r_GCode_PostProcessor_hpp_ */

@@ -388,6 +388,26 @@ static const t_config_enum_values s_keys_map_BedType = {
 };
 CONFIG_OPTION_ENUM_DEFINE_STATIC_MAPS(BedType)
 
+// Non-planar modulation wave functions
+static const t_config_enum_values s_keys_map_NonPlanarWaveFunction = {
+    { "sine",          npwfSine },
+    { "triangle",      npwfTriangle },
+    { "trapezoidal",   npwfTrapezoidal },
+    { "sawtooth",      npwfSawtooth }
+};
+CONFIG_OPTION_ENUM_DEFINE_STATIC_MAPS(NonPlanarWaveFunction)
+
+// Non-planar modulation directions
+static const t_config_enum_values s_keys_map_NonPlanarDirection = {
+    { "x",     npdX },
+    { "y",     npdY },
+    { "xy",    npdXY },
+    { "negx",  npdNegX },
+    { "negy",  npdNegY },
+    { "negxy", npdNegXY }
+};
+CONFIG_OPTION_ENUM_DEFINE_STATIC_MAPS(NonPlanarDirection)
+
 // BBS
 static const t_config_enum_values s_keys_map_LayerSeq = {
     { "Auto",              flsAuto },
@@ -4030,6 +4050,156 @@ void PrintConfigDef::init_fff_params()
     def->height = 6;
     def->mode = comAdvanced;
     def->set_default_value(new ConfigOptionStrings());
+
+    // Non-planar modulation settings
+    def = this->add("nonplanar_modulation_enable", coBool);
+    def->label = L("Enable non-planar modulation");
+    def->tooltip = L("Enable non-planar modulation post-processing for enhanced visual effects and layer adhesion.");
+    def->mode = comAdvanced;
+    def->set_default_value(new ConfigOptionBool(false));
+
+    def = this->add("nonplanar_modulation_include_infill", coBool);
+    def->label = L("Apply to infill");
+    def->tooltip = L("Apply non-planar modulation to infill regions.");
+    def->mode = comAdvanced;
+    def->set_default_value(new ConfigOptionBool(true));
+
+    def = this->add("nonplanar_modulation_include_perimeters", coBool);
+    def->label = L("Apply to internal perimeters");
+    def->tooltip = L("Apply non-planar modulation to internal perimeter walls.");
+    def->mode = comAdvanced;
+    def->set_default_value(new ConfigOptionBool(false));
+
+    def = this->add("nonplanar_modulation_include_external_perimeters", coBool);
+    def->label = L("Apply to external perimeters");
+    def->tooltip = L("Apply non-planar modulation to external perimeter walls.");
+    def->mode = comAdvanced;
+    def->set_default_value(new ConfigOptionBool(false));
+
+    def = this->add("nonplanar_modulation_wall_amplitude", coFloat);
+    def->label = L("Wall amplitude (mm)");
+    def->tooltip = L("Amplitude of the wave pattern for wall modulation in millimeters.");
+    def->sidetext = L("mm");
+    def->min = 0;
+    def->max = 2.0;
+    def->mode = comAdvanced;
+    def->set_default_value(new ConfigOptionFloat(0.3));
+
+    def = this->add("nonplanar_modulation_wall_frequency", coFloat);
+    def->label = L("Wall frequency");
+    def->tooltip = L("Frequency of the wave pattern for wall modulation.");
+    def->min = 0.1;
+    def->max = 10.0;
+    def->mode = comAdvanced;
+    def->set_default_value(new ConfigOptionFloat(1.1));
+
+    def = this->add("nonplanar_modulation_wall_function", coEnum);
+    def->label = L("Wall wave function");
+    def->tooltip = L("Type of wave function to use for wall modulation.");
+    def->enum_keys_map = &ConfigOptionEnum<NonPlanarWaveFunction>::get_enum_values();
+    def->enum_values.push_back("sine");
+    def->enum_values.push_back("triangle");
+    def->enum_values.push_back("trapezoidal");
+    def->enum_values.push_back("sawtooth");
+    def->enum_labels.push_back(L("Sine"));
+    def->enum_labels.push_back(L("Triangle"));
+    def->enum_labels.push_back(L("Trapezoidal"));
+    def->enum_labels.push_back(L("Sawtooth"));
+    def->mode = comAdvanced;
+    def->set_default_value(new ConfigOptionEnum<NonPlanarWaveFunction>(npwfSine));
+
+    def = this->add("nonplanar_modulation_wall_direction", coEnum);
+    def->label = L("Wall direction");
+    def->tooltip = L("Direction of the wave pattern for wall modulation.");
+    def->enum_keys_map = &ConfigOptionEnum<NonPlanarDirection>::get_enum_values();
+    def->enum_values.push_back("x");
+    def->enum_values.push_back("y");
+    def->enum_values.push_back("xy");
+    def->enum_values.push_back("negx");
+    def->enum_values.push_back("negy");
+    def->enum_values.push_back("negxy");
+    def->enum_labels.push_back(L("X"));
+    def->enum_labels.push_back(L("Y"));
+    def->enum_labels.push_back(L("X+Y"));
+    def->enum_labels.push_back(L("-X"));
+    def->enum_labels.push_back(L("-Y"));
+    def->enum_labels.push_back(L("-(X+Y)"));
+    def->mode = comAdvanced;
+    def->set_default_value(new ConfigOptionEnum<NonPlanarDirection>(npdX));
+
+    def = this->add("nonplanar_modulation_infill_amplitude", coFloat);
+    def->label = L("Infill amplitude (mm)");
+    def->tooltip = L("Amplitude of the wave pattern for infill modulation in millimeters.");
+    def->sidetext = L("mm");
+    def->min = 0;
+    def->max = 2.0;
+    def->mode = comAdvanced;
+    def->set_default_value(new ConfigOptionFloat(0.3));
+
+    def = this->add("nonplanar_modulation_infill_frequency", coFloat);
+    def->label = L("Infill frequency");
+    def->tooltip = L("Frequency of the wave pattern for infill modulation.");
+    def->min = 0.1;
+    def->max = 10.0;
+    def->mode = comAdvanced;
+    def->set_default_value(new ConfigOptionFloat(1.1));
+
+    def = this->add("nonplanar_modulation_infill_function", coEnum);
+    def->label = L("Infill wave function");
+    def->tooltip = L("Type of wave function to use for infill modulation.");
+    def->enum_keys_map = &ConfigOptionEnum<NonPlanarWaveFunction>::get_enum_values();
+    def->enum_values.push_back("sine");
+    def->enum_values.push_back("triangle");
+    def->enum_values.push_back("trapezoidal");
+    def->enum_values.push_back("sawtooth");
+    def->enum_labels.push_back(L("Sine"));
+    def->enum_labels.push_back(L("Triangle"));
+    def->enum_labels.push_back(L("Trapezoidal"));
+    def->enum_labels.push_back(L("Sawtooth"));
+    def->mode = comAdvanced;
+    def->set_default_value(new ConfigOptionEnum<NonPlanarWaveFunction>(npwfSine));
+
+    def = this->add("nonplanar_modulation_infill_direction", coEnum);
+    def->label = L("Infill direction");
+    def->tooltip = L("Direction of the wave pattern for infill modulation.");
+    def->enum_keys_map = &ConfigOptionEnum<NonPlanarDirection>::get_enum_values();
+    def->enum_values.push_back("x");
+    def->enum_values.push_back("y");
+    def->enum_values.push_back("xy");
+    def->enum_values.push_back("negx");
+    def->enum_values.push_back("negy");
+    def->enum_values.push_back("negxy");
+    def->enum_labels.push_back(L("X"));
+    def->enum_labels.push_back(L("Y"));
+    def->enum_labels.push_back(L("X+Y"));
+    def->enum_labels.push_back(L("-X"));
+    def->enum_labels.push_back(L("-Y"));
+    def->enum_labels.push_back(L("-(X+Y)"));
+    def->mode = comAdvanced;
+    def->set_default_value(new ConfigOptionEnum<NonPlanarDirection>(npdX));
+
+    def = this->add("nonplanar_modulation_max_step_size", coFloat);
+    def->label = L("Max step size");
+    def->tooltip = L("Maximum amplitude increase per layer as a percentage (0.0-1.0).");
+    def->min = 0.0;
+    def->max = 1.0;
+    def->mode = comAdvanced;
+    def->set_default_value(new ConfigOptionFloat(0.1));
+
+    def = this->add("nonplanar_modulation_alternate_loops", coBool);
+    def->label = L("Alternate loops");
+    def->tooltip = L("Alternate wave phase on successive wall loops for enhanced visual effects.");
+    def->mode = comAdvanced;
+    def->set_default_value(new ConfigOptionBool(false));
+
+    def = this->add("nonplanar_modulation_resolution", coFloat);
+    def->label = L("Resolution (mm)");
+    def->tooltip = L("Resolution of wave segments in millimeters. Lower values create smoother curves but larger file sizes.");
+    def->sidetext = L("mm");
+    def->min = 0.05;
+    def->max = 1.0;
+    def->mode = comAdvanced;
+    def->set_default_value(new ConfigOptionFloat(0.2));
     
     def = this->add("printer_model", coString);
     def->label = L("Printer type");

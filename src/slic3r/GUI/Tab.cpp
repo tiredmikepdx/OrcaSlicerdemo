@@ -2481,6 +2481,30 @@ optgroup->append_single_option_line("skirt_loops", "others_settings_skirt#loops"
         option.opt.height = 15;
         optgroup->append_single_option_line(option, "others_settings_post_processing_scripts");
 
+        optgroup = page->new_optgroup(L("Non-planar Modulation"), L"param_gcode", 0);
+        optgroup->append_single_option_line("nonplanar_modulation_enable");
+        
+        // Create sub-groups for better organization
+        auto sub_optgroup = page->new_optgroup(L("  General Settings"), L"param_gcode", 1);
+        sub_optgroup->append_single_option_line("nonplanar_modulation_include_infill");
+        sub_optgroup->append_single_option_line("nonplanar_modulation_include_perimeters");
+        sub_optgroup->append_single_option_line("nonplanar_modulation_include_external_perimeters");
+        sub_optgroup->append_single_option_line("nonplanar_modulation_resolution");
+        sub_optgroup->append_single_option_line("nonplanar_modulation_max_step_size");
+        sub_optgroup->append_single_option_line("nonplanar_modulation_alternate_loops");
+
+        sub_optgroup = page->new_optgroup(L("  Wall Settings"), L"param_gcode", 1);
+        sub_optgroup->append_single_option_line("nonplanar_modulation_wall_amplitude");
+        sub_optgroup->append_single_option_line("nonplanar_modulation_wall_frequency");
+        sub_optgroup->append_single_option_line("nonplanar_modulation_wall_function");
+        sub_optgroup->append_single_option_line("nonplanar_modulation_wall_direction");
+
+        sub_optgroup = page->new_optgroup(L("  Infill Settings"), L"param_gcode", 1);
+        sub_optgroup->append_single_option_line("nonplanar_modulation_infill_amplitude");
+        sub_optgroup->append_single_option_line("nonplanar_modulation_infill_frequency");
+        sub_optgroup->append_single_option_line("nonplanar_modulation_infill_function");
+        sub_optgroup->append_single_option_line("nonplanar_modulation_infill_direction");
+
         optgroup = page->new_optgroup(L("Notes"), "note", 0);
         option = optgroup->get_option("notes");
         option.opt.full_width = true;

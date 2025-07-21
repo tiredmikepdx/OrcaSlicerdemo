@@ -16,6 +16,11 @@
 #include <iostream>
 #include <fstream>
 
+#ifndef WIN32
+#include <unistd.h>   // For readlink
+#include <limits.h>   // For PATH_MAX
+#endif
+
 #ifdef WIN32
 
 // The standard Windows includes.
@@ -225,6 +230,177 @@ void gcode_add_line_number(const std::string& path, const DynamicPrintConfig& co
     fs.close();
 }
 
+// Build non-planar modulation script command from configuration
+std::string build_nonplanar_modulation_script_command(const DynamicPrintConfig &config)
+{
+    const ConfigOptionBool* enable_opt = config.opt<ConfigOptionBool>("nonplanar_modulation_enable");
+    if (!enable_opt || !enable_opt->getBool()) {
+        return "";
+    }
+
+    // Try to find the script in the scripts directory relative to the executable
+    std::string script_path;
+    
+    // First try relative to current directory (for development)
+    if (boost::filesystem::exists("scripts/gcode_nonplanar_modulation.py")) {
+        script_path = "python3 scripts/gcode_nonplanar_modulation.py";
+    }
+    // Try relative to executable directory
+    else {
+#ifdef WIN32
+        wchar_t wpath_exe[_MAX_PATH + 1];
+        ::GetModuleFileNameW(nullptr, wpath_exe, _MAX_PATH);
+        boost::filesystem::path exe_path(wpath_exe);
+        boost::filesystem::path script_file = exe_path.parent_path() / "scripts" / "gcode_nonplanar_modulation.py";
+        if (boost::filesystem::exists(script_file)) {
+            script_path = "python3 \"" + script_file.string() + "\"";
+        }
+#else
+        char path[PATH_MAX];
+        ssize_t count = readlink("/proc/self/exe", path, PATH_MAX);
+        if (count != -1) {
+            path[count] = '\0';
+            boost::filesystem::path exe_path(path);
+            boost::filesystem::path script_file = exe_path.parent_path() / "scripts" / "gcode_nonplanar_modulation.py";
+            if (boost::filesystem::exists(script_file)) {
+                script_path = "python3 \"" + script_file.string() + "\"";
+            }
+        }
+#endif
+    }
+    
+    // If we couldn't find the script, fall back to a default path
+    if (script_path.empty()) {
+        script_path = "python3 scripts/gcode_nonplanar_modulation.py";
+    }
+
+    std::vector<std::string> args;
+
+    // Include options
+    const ConfigOptionBool* include_infill = config.opt<ConfigOptionBool>("nonplanar_modulation_include_infill");
+    const ConfigOptionBool* include_perimeters = config.opt<ConfigOptionBool>("nonplanar_modulation_include_perimeters");
+    const ConfigOptionBool* include_external_perimeters = config.opt<ConfigOptionBool>("nonplanar_modulation_include_external_perimeters");
+
+    // If no include options are set, return empty string
+    bool has_includes = (include_infill && include_infill->getBool()) ||
+                       (include_perimeters && include_perimeters->getBool()) ||
+                       (include_external_perimeters && include_external_perimeters->getBool());
+    
+    if (!has_includes) {
+        return "";
+    }
+
+    if (include_infill && include_infill->getBool()) {
+        args.push_back("-include-infill");
+    }
+    if (include_perimeters && include_perimeters->getBool()) {
+        args.push_back("-include-perimeters");
+    }
+    if (include_external_perimeters && include_external_perimeters->getBool()) {
+        args.push_back("-include-external-perimeters");
+    }
+
+    // Wall settings
+    const ConfigOptionFloat* wall_amplitude = config.opt<ConfigOptionFloat>("nonplanar_modulation_wall_amplitude");
+    if (wall_amplitude) {
+        args.push_back("-wall-amplitude");
+        args.push_back(std::to_string(wall_amplitude->value));
+    }
+
+    const ConfigOptionFloat* wall_frequency = config.opt<ConfigOptionFloat>("nonplanar_modulation_wall_frequency");
+    if (wall_frequency) {
+        args.push_back("-wall-frequency");
+        args.push_back(std::to_string(wall_frequency->value));
+    }
+
+    const ConfigOptionEnum<NonPlanarWaveFunction>* wall_function = config.opt<ConfigOptionEnum<NonPlanarWaveFunction>>("nonplanar_modulation_wall_function");
+    if (wall_function) {
+        args.push_back("-perimeter-function");
+        switch (wall_function->value) {
+            case npwfSine: args.push_back("sine"); break;
+            case npwfTriangle: args.push_back("triangle"); break;
+            case npwfTrapezoidal: args.push_back("trapezoidal"); break;
+            case npwfSawtooth: args.push_back("sawtooth"); break;
+        }
+    }
+
+    const ConfigOptionEnum<NonPlanarDirection>* wall_direction = config.opt<ConfigOptionEnum<NonPlanarDirection>>("nonplanar_modulation_wall_direction");
+    if (wall_direction) {
+        args.push_back("-wall-direction");
+        switch (wall_direction->value) {
+            case npdX: args.push_back("x"); break;
+            case npdY: args.push_back("y"); break;
+            case npdXY: args.push_back("xy"); break;
+            case npdNegX: args.push_back("negx"); break;
+            case npdNegY: args.push_back("negy"); break;
+            case npdNegXY: args.push_back("negxy"); break;
+        }
+    }
+
+    // Infill settings
+    const ConfigOptionFloat* infill_amplitude = config.opt<ConfigOptionFloat>("nonplanar_modulation_infill_amplitude");
+    if (infill_amplitude) {
+        args.push_back("-infill-amplitude");
+        args.push_back(std::to_string(infill_amplitude->value));
+    }
+
+    const ConfigOptionFloat* infill_frequency = config.opt<ConfigOptionFloat>("nonplanar_modulation_infill_frequency");
+    if (infill_frequency) {
+        args.push_back("-infill-frequency");
+        args.push_back(std::to_string(infill_frequency->value));
+    }
+
+    const ConfigOptionEnum<NonPlanarWaveFunction>* infill_function = config.opt<ConfigOptionEnum<NonPlanarWaveFunction>>("nonplanar_modulation_infill_function");
+    if (infill_function) {
+        args.push_back("-infill-function");
+        switch (infill_function->value) {
+            case npwfSine: args.push_back("sine"); break;
+            case npwfTriangle: args.push_back("triangle"); break;
+            case npwfTrapezoidal: args.push_back("trapezoidal"); break;
+            case npwfSawtooth: args.push_back("sawtooth"); break;
+        }
+    }
+
+    const ConfigOptionEnum<NonPlanarDirection>* infill_direction = config.opt<ConfigOptionEnum<NonPlanarDirection>>("nonplanar_modulation_infill_direction");
+    if (infill_direction) {
+        args.push_back("-infill-direction");
+        switch (infill_direction->value) {
+            case npdX: args.push_back("x"); break;
+            case npdY: args.push_back("y"); break;
+            case npdXY: args.push_back("xy"); break;
+            case npdNegX: args.push_back("negx"); break;
+            case npdNegY: args.push_back("negy"); break;
+            case npdNegXY: args.push_back("negxy"); break;
+        }
+    }
+
+    // Advanced settings
+    const ConfigOptionFloat* max_step_size = config.opt<ConfigOptionFloat>("nonplanar_modulation_max_step_size");
+    if (max_step_size) {
+        args.push_back("-max-step-size");
+        args.push_back(std::to_string(max_step_size->value));
+    }
+
+    const ConfigOptionBool* alternate_loops = config.opt<ConfigOptionBool>("nonplanar_modulation_alternate_loops");
+    if (alternate_loops && alternate_loops->getBool()) {
+        args.push_back("-alternate-loops");
+    }
+
+    const ConfigOptionFloat* resolution = config.opt<ConfigOptionFloat>("nonplanar_modulation_resolution");
+    if (resolution) {
+        args.push_back("-resolution");
+        args.push_back(std::to_string(resolution->value));
+    }
+
+    // Build the final command
+    std::string command = script_path;
+    for (const std::string& arg : args) {
+        command += " " + arg;
+    }
+
+    return command;
+}
+
 // Run post processing script / scripts if defined.
 // Returns true if a post-processing script was executed.
 // Returns false if no post-processing script was defined.
@@ -238,10 +414,14 @@ void gcode_add_line_number(const std::string& path, const DynamicPrintConfig& co
 bool run_post_process_scripts(std::string &src_path, bool make_copy, const std::string &host, std::string &output_name, const DynamicPrintConfig &config)
 {
     const auto *post_process = config.opt<ConfigOptionStrings>("post_process");
+    
+    // Check if non-planar modulation is enabled
+    std::string nonplanar_command = build_nonplanar_modulation_script_command(config);
+    
     if (// likely running in SLA mode
         post_process == nullptr || 
-        // no post-processing script
-        post_process->values.empty())
+        // no post-processing script and no non-planar modulation
+        (post_process->values.empty() && nonplanar_command.empty()))
         return false;
 
     std::string path;
@@ -301,32 +481,58 @@ bool run_post_process_scripts(std::string &src_path, bool make_copy, const std::
     remove_output_name_file();
 
     try {
-        for (const std::string &scripts : post_process->values) {
-    		std::vector<std::string> lines;
-    		boost::split(lines, scripts, boost::is_any_of("\r\n"));
-            for (std::string script : lines) {
-                // Ignore empty post processing script lines.
-                boost::trim(script);
-                if (script.empty())
-                    continue;
-                BOOST_LOG_TRIVIAL(info) << "Executing script " << script << " on file " << path;
-                std::string std_err;
-                const int result = run_script(script, gcode_file.string(), std_err);
-                if (result != 0) {
-                    const std::string msg = std_err.empty() ? (boost::format("Post-processing script %1% on file %2% failed.\nError code: %3%") % script % path % result).str()
-                        : (boost::format("Post-processing script %1% on file %2% failed.\nError code: %3%\nOutput:\n%4%") % script % path % result % std_err).str();
-                    BOOST_LOG_TRIVIAL(error) << msg;
-                    delete_copy();
-                    throw Slic3r::RuntimeError(msg);
-                }
-                if (! boost::filesystem::exists(gcode_file)) {
-                    const std::string msg = (boost::format(_(L(
-                        "Post-processing script %1% failed.\n\n"
-                        "The post-processing script is expected to change the G-code file %2% in place, but the G-code file was deleted and likely saved under a new name.\n"
-                        "Please adjust the post-processing script to change the G-code in place and consult the manual on how to optionally rename the post-processed G-code file.\n")))
-                        % script % path).str();
-                    BOOST_LOG_TRIVIAL(error) << msg;
-                    throw Slic3r::RuntimeError(msg);
+        // Execute non-planar modulation script first if enabled
+        if (!nonplanar_command.empty()) {
+            BOOST_LOG_TRIVIAL(info) << "Executing non-planar modulation script: " << nonplanar_command << " on file " << path;
+            std::string std_err;
+            const int result = run_script(nonplanar_command, gcode_file.string(), std_err);
+            if (result != 0) {
+                const std::string msg = std_err.empty() ? (boost::format("Non-planar modulation script %1% on file %2% failed.\nError code: %3%") % nonplanar_command % path % result).str()
+                    : (boost::format("Non-planar modulation script %1% on file %2% failed.\nError code: %3%\nOutput:\n%4%") % nonplanar_command % path % result % std_err).str();
+                BOOST_LOG_TRIVIAL(error) << msg;
+                delete_copy();
+                throw Slic3r::RuntimeError(msg);
+            }
+            if (! boost::filesystem::exists(gcode_file)) {
+                const std::string msg = (boost::format(_(L(
+                    "Non-planar modulation script %1% failed.\n\n"
+                    "The script is expected to change the G-code file %2% in place, but the G-code file was deleted and likely saved under a new name.\n"
+                    "Please check the script configuration and consult the manual.\n")))
+                    % nonplanar_command % path).str();
+                BOOST_LOG_TRIVIAL(error) << msg;
+                throw Slic3r::RuntimeError(msg);
+            }
+        }
+
+        // Execute user-defined post-processing scripts
+        if (post_process && !post_process->values.empty()) {
+            for (const std::string &scripts : post_process->values) {
+        		std::vector<std::string> lines;
+        		boost::split(lines, scripts, boost::is_any_of("\r\n"));
+                for (std::string script : lines) {
+                    // Ignore empty post processing script lines.
+                    boost::trim(script);
+                    if (script.empty())
+                        continue;
+                    BOOST_LOG_TRIVIAL(info) << "Executing script " << script << " on file " << path;
+                    std::string std_err;
+                    const int result = run_script(script, gcode_file.string(), std_err);
+                    if (result != 0) {
+                        const std::string msg = std_err.empty() ? (boost::format("Post-processing script %1% on file %2% failed.\nError code: %3%") % script % path % result).str()
+                            : (boost::format("Post-processing script %1% on file %2% failed.\nError code: %3%\nOutput:\n%4%") % script % path % result % std_err).str();
+                        BOOST_LOG_TRIVIAL(error) << msg;
+                        delete_copy();
+                        throw Slic3r::RuntimeError(msg);
+                    }
+                    if (! boost::filesystem::exists(gcode_file)) {
+                        const std::string msg = (boost::format(_(L(
+                            "Post-processing script %1% failed.\n\n"
+                            "The post-processing script is expected to change the G-code file %2% in place, but the G-code file was deleted and likely saved under a new name.\n"
+                            "Please adjust the post-processing script to change the G-code in place and consult the manual on how to optionally rename the post-processed G-code file.\n")))
+                            % script % path).str();
+                        BOOST_LOG_TRIVIAL(error) << msg;
+                        throw Slic3r::RuntimeError(msg);
+                    }
                 }
             }
         }
