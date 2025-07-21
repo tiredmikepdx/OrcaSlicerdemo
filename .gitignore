@@ -43,3 +43,4 @@ gcode_debug.log
 __pycache__/
 *.pyc
 *.pyo
+scripts/z_shift_log.txt
