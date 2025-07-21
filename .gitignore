@@ -38,3 +38,8 @@ resources/profiles/user/default
 
 # Script log files
 gcode_debug.log
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
