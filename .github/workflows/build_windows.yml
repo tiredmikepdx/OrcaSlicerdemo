@@ -1,0 +1,57 @@
+name: Build Windows package
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/**'
+      - 'CMakeLists.txt'
+      - 'build_release_vs2022.bat'
+      - '.github/workflows/build_windows.yml'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Enable long paths (fix path length issues)
+        shell: bash
+        run: git config --system core.longpaths true
+
+      - name: Set up Visual Studio
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Build Windows release
+        shell: cmd
+        run: |
+          build_release_vs2022.bat
+
+      - name: Create ZIP of build directory
+        shell: powershell
+        run: |
+          $buildDir = Get-ChildItem -Path . -Filter "build" -Directory
+          if ($buildDir.Count -eq 0) { throw "Build directory not found" }
+          $installDir = Join-Path $buildDir.FullName "OrcaSlicer"
+          if (-Not (Test-Path $installDir)) { throw "Install directory not found: $installDir" }
+          Compress-Archive -Path $installDir\* -DestinationPath OrcaSlicer_Windows.zip -Force
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: OrcaSlicer_Windows
+          path: OrcaSlicer_Windows.zip
+
+      - name: Deploy to nightly release
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: nightly
+          name: Nightly Build
+          body: Automated nightly Windows build
+          files: OrcaSlicer_Windows.zip
